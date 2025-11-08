@@ -24,8 +24,5 @@ public class ExampleModClient {
 
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
-        // Some client setup code
-        AquaMod.LOGGER.info("HELLO FROM CLIENT SETUP");
-        AquaMod.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
     }
 }
