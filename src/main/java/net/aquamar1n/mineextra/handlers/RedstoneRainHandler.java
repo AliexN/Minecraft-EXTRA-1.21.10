@@ -11,77 +11,113 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.state.BlockState;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 @EventBusSubscriber(modid = AquaMod.MOD_ID)
 public class RedstoneRainHandler {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(RedstoneRainHandler.class);
-
     private static final Map<BlockPos, Long> CHECK_COOLDOWN_MAP = new HashMap<>();
+
+    // Кэш для быстрого доступа к известным позициям с редстоуном
+    private static final Map<BlockPos, Boolean> KNOWN_REDSTONE_POSITIONS = new HashMap<>();
+    private static long lastCacheClear = 0;
 
     @SubscribeEvent
     public static void onLevelTick(LevelTickEvent.Post event) {
         if (!(event.getLevel() instanceof ServerLevel level)) return;
 
-        if (RedstoneRainConfig.ENABLED.get()) {
-            if (level.isRaining() && level.getGameTime() % RedstoneRainConfig.CHECK_INTERVAL.get() == 0) {
-                LOGGER.info("Rain tick triggered - checking for exposed redstone");
-                checkForExposedRedstone(level);
-            }
+        // Очищаем кэш каждые 2 минуты
+        long currentTime = level.getGameTime();
+        if (currentTime - lastCacheClear > 2400) {
+            KNOWN_REDSTONE_POSITIONS.clear();
+            lastCacheClear = currentTime;
+            LOGGER.debug("Cleared redstone position cache");
+        }
+
+        if (RedstoneRainConfig.ENABLED.get() && level.isRaining()) {
+            // Проверяем каждый тик (убрали интервал)
+            LOGGER.debug("Rain tick - checking for exposed redstone");
+            checkForExposedRedstone(level);
         }
     }
 
     private static void checkForExposedRedstone(ServerLevel level) {
         long currentTime = level.getGameTime();
-
         int cooldownTicks = RedstoneRainConfig.CHECK_COOLDOWN.get();
-        CHECK_COOLDOWN_MAP.entrySet().removeIf(entry -> currentTime - entry.getValue() > (long) cooldownTicks);
 
-        List<ServerPlayer> players = level.players();
+        // Очищаем старые записи из кэша кулдауна
+        CHECK_COOLDOWN_MAP.entrySet().removeIf(entry -> currentTime - entry.getValue() > cooldownTicks);
 
-        if (CHECK_COOLDOWN_MAP.size() > 5000) {  // Limit map
+        // Ограничиваем размер мапы
+        if (CHECK_COOLDOWN_MAP.size() > 8000) {
             CHECK_COOLDOWN_MAP.clear();
             LOGGER.warn("Cleared cooldown map to prevent memory issues");
         }
+
+        List<ServerPlayer> players = level.players();
         if (players.isEmpty()) {
-            LOGGER.warn("No players - skipping check");
             return;
         }
 
-        for (int i = 0; i < RedstoneRainConfig.CHECKS_PER_TICK.get(); i++) {
+        int checksPerTick = RedstoneRainConfig.CHECKS_PER_TICK.get();
+        int checksDone = 0;
+
+        // Сначала проверяем известные позиции с редстоуном (более эффективно)
+        if (!KNOWN_REDSTONE_POSITIONS.isEmpty()) {
+            var iterator = KNOWN_REDSTONE_POSITIONS.entrySet().iterator();
+            while (iterator.hasNext() && checksDone < checksPerTick) {
+                var entry = iterator.next();
+                BlockPos knownPos = entry.getKey();
+
+                if (CHECK_COOLDOWN_MAP.containsKey(knownPos)) {
+                    continue;
+                }
+
+                CHECK_COOLDOWN_MAP.put(knownPos, currentTime);
+                checksDone++;
+
+                BlockState state = level.getBlockState(knownPos);
+                if (state.getBlock() instanceof RedStoneWireBlock) {
+                    if (isRedstoneExposedToRain(level, knownPos)) {
+                        destroyRedstone(level, knownPos);
+                        // Удаляем из кэша после разрушения
+                        iterator.remove();
+                    }
+                } else {
+                    // Редстоун исчез - удаляем из кэша
+                    iterator.remove();
+                }
+            }
+        }
+
+        // Затем делаем случайные проверки для поиска нового редстоуна
+        while (checksDone < checksPerTick) {
             BlockPos randomPos = getRandomSurfacePosition(level);
             if (randomPos.equals(BlockPos.ZERO)) {
-                LOGGER.debug("Zero pos - skipping");
                 continue;
             }
 
-            LOGGER.debug("Checking pos: " + randomPos);  // Debug: Какая pos проверяется
-
             if (CHECK_COOLDOWN_MAP.containsKey(randomPos)) {
-                LOGGER.debug("Pos in cooldown: " + randomPos);
                 continue;
             }
 
             CHECK_COOLDOWN_MAP.put(randomPos, currentTime);
+            checksDone++;
 
             BlockState state = level.getBlockState(randomPos);
             if (state.getBlock() instanceof RedStoneWireBlock) {
-                LOGGER.info("Found redstone wire at " + randomPos);  // Debug: Нашёл редстоун
+                // Добавляем в кэш известных позиций
+                KNOWN_REDSTONE_POSITIONS.put(randomPos, true);
+
                 if (isRedstoneExposedToRain(level, randomPos)) {
-                    LOGGER.info("Exposed redstone found at " + randomPos + " - destroying");
                     destroyRedstone(level, randomPos);
-                } else {
-                    LOGGER.debug("Redstone at " + randomPos + " - not exposed (has roof or no rain)");
+                    KNOWN_REDSTONE_POSITIONS.remove(randomPos);
                 }
-            } else {
-                LOGGER.debug("Pos " + randomPos + " - not redstone wire");
             }
         }
     }
@@ -93,27 +129,72 @@ public class RedstoneRainHandler {
         ServerPlayer randomPlayer = players.get(level.random.nextInt(players.size()));
         BlockPos playerPos = randomPlayer.blockPosition();
 
-        int x = playerPos.getX() + level.random.nextInt(400) - 200;  // Увеличил range to 200 for better chance
-        int z = playerPos.getZ() + level.random.nextInt(400) - 200;
+        // Увеличиваем радиус и добавляем вертикальную вариацию
+        int x = playerPos.getX() + level.random.nextInt(500) - 250;
+        int z = playerPos.getZ() + level.random.nextInt(500) - 250;
 
-        int y = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, new BlockPos(x, 0, z)).getY();  // Surface y
+        // Получаем высоту поверхности
+        int surfaceY = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, new BlockPos(x, 0, z)).getY();
 
-        return new BlockPos(x, y, z);  // y for surface blocks like redstone
+        // Добавляем случайное смещение по Y (±3 блока от поверхности)
+        int y = surfaceY + level.random.nextInt(7) - 3;
+        y = Math.max(level.getMinY(), Math.min(level.getMaxY(), y));
+
+        return new BlockPos(x, y, z);
     }
 
     private static boolean isRedstoneExposedToRain(ServerLevel level, BlockPos pos) {
-        if (level.canSeeSky(pos) && level.isRainingAt(pos.above())) {
+        // Более либеральная проверка - учитываем больше условий
+        if (!level.canSeeSky(pos)) {
+            return false;
+        }
+
+        // Проверяем, идет ли дождь в этой позиции или рядом
+        if (level.isRainingAt(pos.above())) {
             return true;
         }
+
+        // Также проверяем соседние позиции выше
+        for (int x = -1; x <= 1; x++) {
+            for (int z = -1; z <= 1; z++) {
+                if (level.isRainingAt(pos.above().offset(x, 0, z))) {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
     private static void destroyRedstone(ServerLevel level, BlockPos pos) {
-        if (level.random.nextDouble() < RedstoneRainConfig.DESTROY_CHANCE.get()) {
-            level.destroyBlock(pos, true);
-            LOGGER.info("Destroyed redstone at " + pos);
-        } else {
-            LOGGER.debug("Chance failed - not destroying " + pos);
+        // Всегда уничтожаем (шанс 100%)
+        level.destroyBlock(pos, true);
+        LOGGER.info("Destroyed redstone at " + pos);
+
+        // Немедленно проверяем и разрушаем соседний редстоун
+        checkAndDestroyAdjacentRedstone(level, pos);
+    }
+
+    private static void checkAndDestroyAdjacentRedstone(ServerLevel level, BlockPos centerPos) {
+        // Проверяем все соседние блоки в радиусе 2 блоков
+        for (int x = -2; x <= 2; x++) {
+            for (int y = -1; y <= 1; y++) {
+                for (int z = -2; z <= 2; z++) {
+                    if (x == 0 && y == 0 && z == 0) continue;
+
+                    BlockPos adjacentPos = centerPos.offset(x, y, z);
+                    BlockState adjacentState = level.getBlockState(adjacentPos);
+
+                    if (adjacentState.getBlock() instanceof RedStoneWireBlock) {
+                        if (isRedstoneExposedToRain(level, adjacentPos)) {
+                            // Немедленно уничтожаем без дополнительных проверок
+                            level.destroyBlock(adjacentPos, true);
+                            KNOWN_REDSTONE_POSITIONS.remove(adjacentPos);
+                            LOGGER.info("Destroyed adjacent redstone at " + adjacentPos);
+                        }
+                    }
+                }
+            }
         }
     }
 }
