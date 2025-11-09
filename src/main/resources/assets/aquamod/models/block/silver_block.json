@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "aquamod:block/silver_ore"
+    "all": "aquamod:block/silver_block"
   }
 }

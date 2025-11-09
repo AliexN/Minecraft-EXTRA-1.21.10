@@ -48,6 +48,8 @@ neoForge {
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            systemProperty 'forge.logging.markers', 'REGISTRIES,MODEL_LOAD'
+            logLevel = org.slf4j.event.Level.DEBUG
         }
 
         server {

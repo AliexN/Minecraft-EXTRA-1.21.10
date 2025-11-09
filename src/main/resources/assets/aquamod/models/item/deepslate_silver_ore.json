@@ -1,3 +1,6 @@
 {
-  "parent": "aquamod:block/deepslate_silver_ore"
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "aquamod:block/deepslate_silver_ore"
+  }
 }

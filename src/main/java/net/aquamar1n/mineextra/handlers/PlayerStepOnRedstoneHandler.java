@@ -8,38 +8,35 @@ import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.tick.EntityTickEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 @EventBusSubscriber(modid = AquaMod.MOD_ID)
 public class PlayerStepOnRedstoneHandler {
 
     @SubscribeEvent
-    public static void onLivingTick(EntityTickEvent.Post event) {
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
-            return;
+            return; // Хотя событие только для игроков, на всякий случай
+        }
+
+        if (player.isCrouching()) {
+            return; // Не разрушаем, если игрок присел
         }
 
         if (!(player.level() instanceof ServerLevel level)) {
             return;
         }
 
-        // Проверяем, не присел ли игрок
-        if (player.isCrouching()) {
-            return;
-        }
-
-        // Получаем позицию под игроком
+        // Позиция под ногами
         BlockPos posBelow = player.blockPosition().below();
         BlockState state = level.getBlockState(posBelow);
 
-        // Проверяем, стоит ли игрок на редстоуне
         if (state.getBlock() instanceof RedStoneWireBlock) {
-            // Ломаем редстоун
             level.destroyBlock(posBelow, true);
             return;
         }
 
-        // Дополнительная проверка для позиции, где находятся ноги игрока
+        // Проверка позиции ног (если отличается)
         BlockPos feetPos = BlockPos.containing(player.getX(), player.getY(), player.getZ());
         if (!feetPos.equals(posBelow)) {
             BlockState feetState = level.getBlockState(feetPos);

@@ -18,22 +18,18 @@ public class RedstoneRainConfig {
                 .comment("Enable redstone destruction by rain")
                 .define("enabled", true);
 
-        // Убрали интервал - проверяем каждый тик
         CHECK_INTERVAL = BUILDER
                 .comment("Interval between checks (in ticks, 20 ticks = 1 second)")
-                .defineInRange("checkInterval", 1, 1, 1); // Всегда 1
+                .defineInRange("checkInterval", 20, 1, 100); // Вернул дефолт 20 для производительности
 
-        // Значительно увеличили количество проверок
         CHECKS_PER_TICK = BUILDER
                 .comment("Number of positions to check per tick")
                 .defineInRange("checksPerTick", 300, 50, 1000);
 
-        // Шанс 100%
         DESTROY_CHANCE = BUILDER
                 .comment("Chance that exposed redstone will be destroyed (0.0 - 1.0)")
                 .defineInRange("destroyChance", 1.0, 0.0, 1.0);
 
-        // Минимальный кулдаун
         CHECK_COOLDOWN = BUILDER
                 .comment("Cooldown for checked positions (in ticks)")
                 .defineInRange("checkCooldown", 5, 1, 20);

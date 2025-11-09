@@ -1,0 +1,13 @@
+{
+  "itemGroup.mineextra_tab": "Mine Extra",
+
+  "block.aquamod.silver_ore": "Silver Ore",
+  "block.aquamod.deepslate_silver_ore": "Deepslate Silver Ore",
+  "block.aquamod.silver_block": "Block of Silver",
+
+  "item.aquamod.silver_ore": "Silver Ore",
+  "item.aquamod.deepslate_silver_ore": "Deepslate Silver Ore",
+  "item.aquamod.silver_block": "Block of Silver",
+  "item.aquamod.silver_ingot": "Silver Ingot",
+  "item.aquamod.silver_nugget": "Silver Nugget"
+}
