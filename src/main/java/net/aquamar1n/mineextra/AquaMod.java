@@ -23,7 +23,13 @@ public class AquaMod {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public AquaMod(IEventBus modEventBus, ModContainer modContainer) {
-        // === Регистрация конфига ===
+        try {
+            // весь код конструктора
+        } catch (Exception e) {
+            LOGGER.error("Error in AquaMod constructor", e);
+            throw e; // чтобы краш показал stacktrace
+        }
+
         modContainer.registerConfig(ModConfig.Type.COMMON, RedstoneRainConfig.SPEC);
 
         // === Регистрация обработчиков событий ===

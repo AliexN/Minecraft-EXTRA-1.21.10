@@ -1,7 +1,5 @@
 {
   "variants": {
-    "": {
-      "model": "aquamod:block/deepslate_silver_ore"
-    }
+    "": { "model": "aquamod:block/deepslate_silver_ore" }
   }
 }

@@ -1,7 +1,5 @@
 {
   "variants": {
-    "": {
-      "model": "aquamod:block/silver_ore"
-    }
+    "": { "model": "aquamod:block/silver_ore" }
   }
 }
