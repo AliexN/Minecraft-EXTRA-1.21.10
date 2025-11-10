@@ -7,7 +7,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.placement.*;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 import java.util.List;
 
@@ -18,14 +17,14 @@ public class ModPlacedFeatures {
                     ResourceLocation.fromNamespaceAndPath(AquaMod.MOD_ID, "silver_ore_placed"));
 
     public static void bootstrap(BootstrapContext<PlacedFeature> context) {
-        var holder = context.lookup(Registries.CONFIGURED_FEATURE);
+        var configuredFeaturesRegistry = context.lookup(Registries.CONFIGURED_FEATURE);
 
         context.register(SILVER_ORE_PLACED_KEY, new PlacedFeature(
-                holder.getOrThrow(ModConfiguredFeatures.SILVER_ORE_KEY),
+                configuredFeaturesRegistry.getOrThrow(ModConfiguredFeatures.SILVER_ORE_KEY),
                 List.of(
-                        CountPlacement.of(10), // количество жил
+                        CountPlacement.of(8), // Уменьшено с 81 до более разумного значения
                         InSquarePlacement.spread(),
-                        HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)),
+                        HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80)),
                         BiomeFilter.biome()
                 )
         ));

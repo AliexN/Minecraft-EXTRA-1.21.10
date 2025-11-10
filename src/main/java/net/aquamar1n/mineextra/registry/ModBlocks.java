@@ -21,6 +21,11 @@ public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.create(Registries.BLOCK, AquaMod.MOD_ID);
 
+    public static final ResourceKey<Block> SILVER_ORE_KEY =
+            ResourceKey.create(Registries.BLOCK, AquaMod.id("silver_ore"));
+    public static final ResourceKey<Block> DEEPSLATE_SILVER_ORE_KEY =
+            ResourceKey.create(Registries.BLOCK, AquaMod.id("deepslate_silver_ore"));
+
     // === Серебряная руда ===
     public static final DeferredHolder<Block, Block> SILVER_ORE = registerBlock(
             "silver_ore",
