@@ -6,6 +6,7 @@ import net.aquamar1n.mineextra.handlers.RedstoneRainHandler;
 import net.aquamar1n.mineextra.registry.ModBlocks;
 import net.aquamar1n.mineextra.registry.ModItems;
 import net.aquamar1n.mineextra.registry.ModCreativeTabs;
+import net.aquamar1n.mineextra.registry.ModWorldGen;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -16,9 +17,6 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
-
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 
 @Mod(AquaMod.MOD_ID)
 public class AquaMod {
@@ -34,6 +32,8 @@ public class AquaMod {
             ModBlocks.register(modEventBus);
             ModItems.register(modEventBus);
             ModCreativeTabs.register(modEventBus);
+
+            modEventBus.addListener(ModWorldGen::registerDataMaps);
 
             modEventBus.addListener(this::commonSetup);
             modEventBus.addListener(this::clientSetup);

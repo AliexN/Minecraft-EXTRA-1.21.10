@@ -1,5 +1,5 @@
 {
   "variants": {
-    "": { "model": "aquamod:block/silver_block" }
+    "normal": { "model": "aquamod:block/silver_block" }
   }
 }

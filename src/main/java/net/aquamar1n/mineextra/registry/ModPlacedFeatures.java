@@ -22,7 +22,7 @@ public class ModPlacedFeatures {
         context.register(SILVER_ORE_PLACED_KEY, new PlacedFeature(
                 configuredFeaturesRegistry.getOrThrow(ModConfiguredFeatures.SILVER_ORE_KEY),
                 List.of(
-                        CountPlacement.of(8), // Уменьшено с 81 до более разумного значения
+                        CountPlacement.of(6), // На 10% реже чем железо (у железа обычно 7-8)
                         InSquarePlacement.spread(),
                         HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80)),
                         BiomeFilter.biome()
