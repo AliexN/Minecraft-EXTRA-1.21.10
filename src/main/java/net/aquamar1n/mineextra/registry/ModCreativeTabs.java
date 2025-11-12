@@ -22,11 +22,14 @@ public class ModCreativeTabs {
                         // Предметы
                         output.accept(ModItems.SILVER_INGOT.get());
                         output.accept(ModItems.SILVER_NUGGET.get());
+                        output.accept(ModItems.BLUESTONE_DUST_ITEM.get());
 
                         // Блоки как предметы (используем BlockItems)
                         output.accept(ModItems.SILVER_ORE_ITEM.get());
                         output.accept(ModItems.DEEPSLATE_SILVER_ORE_ITEM.get());
                         output.accept(ModItems.SILVER_BLOCK_ITEM.get());
+                        output.accept(ModItems.BLUESTONE_BLOCK_ITEM.get());
+                        output.accept(ModItems.BLUESTONE_ORE_ITEM.get());
                     })
                     .build());
 

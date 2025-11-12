@@ -61,6 +61,33 @@ public class ModItems {
             )
     );
 
+    public static final DeferredHolder<Item, Item> BLUESTONE_BLOCK_ITEM = registerBlockItem(
+            "bluestone_block",
+            name -> new BlockItem(
+                    ModBlocks.BLUESTONE_BLOCK.value(),
+                    new Item.Properties()
+                            .setId(ResourceKey.create(Registries.ITEM, AquaMod.id(name)))
+            )
+    );
+
+    public static final DeferredHolder<Item, Item> BLUESTONE_DUST_ITEM = registerBlockItem(
+            "bluestone_dust",
+            name -> new BlockItem(
+                    ModBlocks.BLUESTONE_DUST.value(),
+                    new Item.Properties()
+                            .setId(ResourceKey.create(Registries.ITEM, AquaMod.id(name)))
+            )
+    );
+
+    public static final DeferredHolder<Item, Item> BLUESTONE_ORE_ITEM = registerBlockItem(
+            "bluestone_ore", // ← Должно совпадать с именем в ModBlocks
+            name -> new BlockItem(
+                    ModBlocks.BLUESTONE_ORE.value(),
+                    new Item.Properties()
+                            .setId(ResourceKey.create(Registries.ITEM, AquaMod.id(name)))
+            )
+    );
+
     private static DeferredHolder<Item, Item> registerBlockItem(String name, Function<String, BlockItem> itemSupplier) {
         return ITEMS.register(name, () -> itemSupplier.apply(name));
     }

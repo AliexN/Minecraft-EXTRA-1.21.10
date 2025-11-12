@@ -13,6 +13,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.aquamar1n.mineextra.registry.BluestoneDustBlock;
 
 import java.util.function.Function;
 
@@ -66,6 +67,43 @@ public class ModBlocks {
                             .setId(ResourceKey.create(Registries.BLOCK, AquaMod.id(name)))
             )
     );
+
+    public static final DeferredHolder<Block,Block> BLUESTONE_BLOCK = registerBlock(
+            "bluestone_block",
+            name -> new Block(
+                    BlockBehaviour.Properties.of()
+                            .requiresCorrectToolForDrops()
+                            .strength(5.0f, 6.0f)
+                            .sound(SoundType.METAL)
+                            .setId(ResourceKey.create(Registries.BLOCK, AquaMod.id(name)))
+            )
+    );
+
+    public static final DeferredHolder<Block,Block> BLUESTONE_DUST = registerBlock(
+            "bluestone_dust",
+            name -> new Block(
+                    BlockBehaviour.Properties.of()
+                            .requiresCorrectToolForDrops()
+                            .strength(0.0f)
+                            .sound(SoundType.METAL)
+                            .setId(ResourceKey.create(Registries.BLOCK, AquaMod.id(name)))
+            )
+    );
+
+    public static final DeferredHolder<Block, Block> BLUESTONE_ORE = registerBlock(
+            "bluestone_ore", // ← ИСПРАВЬТЕ НА "bluestone_ore"
+            name -> new DropExperienceBlock(
+                    UniformInt.of(1, 3),
+                    BlockBehaviour.Properties.of()
+                            .requiresCorrectToolForDrops()
+                            .strength(3.0f, 3.0f)
+                            .sound(SoundType.STONE)
+                            .instrument(NoteBlockInstrument.BASEDRUM)
+                            .mapColor(MapColor.STONE)
+                            .setId(ResourceKey.create(Registries.BLOCK, AquaMod.id(name)))
+            )
+    );
+
 
     private static <T extends Block> DeferredHolder<Block, T> registerBlock(String name, Function<String, T> blockSupplier) {
         return BLOCKS.register(name, () -> blockSupplier.apply(name));

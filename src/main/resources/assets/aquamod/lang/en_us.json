@@ -7,5 +7,11 @@
   "item.aquamod.silver_nugget": "Silver Nugget",
   "item.aquamod.silver_ore": "Silver Ore",
   "item.aquamod.deepslate_silver_ore": "Deepslate Silver Ore",
-  "item.aquamod.silver_block": "Silver Block"
+  "item.aquamod.silver_block": "Silver Block",
+  "block.aquamod.bluestone_block": "Bluestone Block",
+  "block.aquamod.bluestone_dust": "Bluestone Dust",
+  "item.aquamod.bluestone_dust": "Bluestone Dust",
+  "item.aquamod.bluestone_block": "Bluestone Block",
+  "block.aquamod.bluestone_ore": "Bluestone Ore",
+  "item.aquamod.bluestone_ore": "Bluestone Ore"
 }

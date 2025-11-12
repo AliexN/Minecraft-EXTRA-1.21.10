@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "aquamod:bluestone_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "aquamod:bluestone_dust"
+  }
+}
