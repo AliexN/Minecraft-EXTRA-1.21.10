@@ -2,10 +2,8 @@
   "type": "minecraft:smelting",
   "category": "misc",
   "cookingtime": 200,
-  "experience": 0.7,
-  "ingredient": {
-    "item": "aquamod:silver_nugget"
-  },
+  "experience": 0.1,
+  "ingredient": "aquamod:silver_nugget",
   "result": {
     "id": "aquamod:silver_ingot"
   }
