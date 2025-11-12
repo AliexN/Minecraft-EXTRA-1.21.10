@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "aquamod:silver_block",
+          "functions": [
+            { "function": "minecraft:explosion_decay" }
+          ],
+          "conditions": [
+            {
+              "condition": "minecraft:match_tool",
+              "predicate": {
+                "predicate": {
+                  "tier": { "min": 2 }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
