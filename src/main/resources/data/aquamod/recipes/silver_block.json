@@ -1,16 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "III",
-    "III",
-    "III"
-  ],
+  "category": "building",
   "key": {
     "I": {
       "item": "aquamod:silver_ingot"
     }
   },
+  "pattern": [
+    "III",
+    "III",
+    "III"
+  ],
   "result": {
-    "item": "aquamod:silver_block"
+    "count": 1,
+    "id": "aquamod:silver_block"
   }
 }
