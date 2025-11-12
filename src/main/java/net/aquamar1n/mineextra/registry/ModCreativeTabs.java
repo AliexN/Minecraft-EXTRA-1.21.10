@@ -30,6 +30,7 @@ public class ModCreativeTabs {
                         output.accept(ModItems.SILVER_BLOCK_ITEM.get());
                         output.accept(ModItems.BLUESTONE_BLOCK_ITEM.get());
                         output.accept(ModItems.BLUESTONE_ORE_ITEM.get());
+                        output.accept(ModItems.DEEPSLATE_BLUESTONE_ORE_ITEM.get());
                     })
                     .build());
 

@@ -13,5 +13,7 @@
   "item.aquamod.bluestone_dust": "Bluestone Dust",
   "item.aquamod.bluestone_block": "Bluestone Block",
   "block.aquamod.bluestone_ore": "Bluestone Ore",
-  "item.aquamod.bluestone_ore": "Bluestone Ore"
+  "item.aquamod.bluestone_ore": "Bluestone Ore",
+  "block.aquamod.deepslate_bluestone_ore": "Deepslate Bluestone Ore",
+  "item.aquamod.deepslate_bluestone_ore": "Deepslate Bluestone Ore"
 }

@@ -104,6 +104,21 @@ public class ModBlocks {
             )
     );
 
+    public static final DeferredHolder<Block, Block> DEEPSLATE_BLUESTONE_ORE = registerBlock(
+            "deepslate_bluestone_ore", // ← ИСПРАВЬТЕ НА "bluestone_ore"
+            name -> new DropExperienceBlock(
+                    UniformInt.of(1, 3),
+                    BlockBehaviour.Properties.of()
+                            .requiresCorrectToolForDrops()
+                            .strength(4.5f, 3.0f)
+                            .sound(SoundType.DEEPSLATE)
+                            .instrument(NoteBlockInstrument.BASEDRUM)
+                            .mapColor(MapColor.DEEPSLATE)
+                            .setId(ResourceKey.create(Registries.BLOCK, AquaMod.id(name)))
+            )
+    );
+
+
 
     private static <T extends Block> DeferredHolder<Block, T> registerBlock(String name, Function<String, T> blockSupplier) {
         return BLOCKS.register(name, () -> blockSupplier.apply(name));

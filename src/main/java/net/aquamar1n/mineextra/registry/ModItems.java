@@ -88,6 +88,15 @@ public class ModItems {
             )
     );
 
+    public static final DeferredHolder<Item, Item> DEEPSLATE_BLUESTONE_ORE_ITEM = registerBlockItem(
+            "deepslate_bluestone_ore", // ← Должно совпадать с именем в ModBlocks
+            name -> new BlockItem(
+                    ModBlocks.DEEPSLATE_BLUESTONE_ORE.value(),
+                    new Item.Properties()
+                            .setId(ResourceKey.create(Registries.ITEM, AquaMod.id(name)))
+            )
+    );
+
     private static DeferredHolder<Item, Item> registerBlockItem(String name, Function<String, BlockItem> itemSupplier) {
         return ITEMS.register(name, () -> itemSupplier.apply(name));
     }
