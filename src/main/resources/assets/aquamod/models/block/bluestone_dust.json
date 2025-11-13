@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/carpet",
   "textures": {
-    "all": "aquamod:block/bluestone_dust"
-  }
+    "wool": "aquamod:block/bluestone_dust"
+  },
+  "render_type": "cutout"
 }

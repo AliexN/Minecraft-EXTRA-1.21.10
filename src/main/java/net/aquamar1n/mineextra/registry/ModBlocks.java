@@ -14,6 +14,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.aquamar1n.mineextra.registry.BluestoneDustBlock;
+import net.aquamar1n.mineextra.registry.BluestoneBlock;
 
 import java.util.function.Function;
 
@@ -68,24 +69,26 @@ public class ModBlocks {
             )
     );
 
-    public static final DeferredHolder<Block,Block> BLUESTONE_BLOCK = registerBlock(
+    public static final DeferredHolder<Block, Block> BLUESTONE_BLOCK = registerBlock(
             "bluestone_block",
-            name -> new Block(
+            name -> new BluestoneBlock(
                     BlockBehaviour.Properties.of()
                             .requiresCorrectToolForDrops()
+                            .lightLevel(state -> 7)
                             .strength(5.0f, 6.0f)
                             .sound(SoundType.METAL)
+                            .mapColor(MapColor.METAL)
                             .setId(ResourceKey.create(Registries.BLOCK, AquaMod.id(name)))
             )
     );
 
-    public static final DeferredHolder<Block,Block> BLUESTONE_DUST = registerBlock(
+    public static final DeferredHolder<Block, Block> BLUESTONE_DUST = registerBlock(
             "bluestone_dust",
-            name -> new Block(
+            name -> new BluestoneDustBlock(
                     BlockBehaviour.Properties.of()
-                            .requiresCorrectToolForDrops()
+                            .lightLevel(state -> 7)
                             .strength(0.0f)
-                            .sound(SoundType.METAL)
+                            .sound(SoundType.SNOW)
                             .setId(ResourceKey.create(Registries.BLOCK, AquaMod.id(name)))
             )
     );

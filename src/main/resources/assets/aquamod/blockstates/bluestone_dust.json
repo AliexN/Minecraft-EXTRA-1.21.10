@@ -1,7 +1,5 @@
 {
   "variants": {
-    "": {
-      "model": "aquamod:block/bluestone_dust"
-    }
+    "": { "model": "aquamod:block/bluestone_dust" }
   }
 }
