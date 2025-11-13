@@ -13,7 +13,6 @@ import net.minecraft.core.particles.DustParticleOptions;
 public class BluestoneDustBlock extends RedStoneWireBlock {
 
     public BluestoneDustBlock(BlockBehaviour.Properties properties) {
-        // Наследует всю механику Redstone Dust: размещение, соединение, свойства.
         super(properties);
     }
 

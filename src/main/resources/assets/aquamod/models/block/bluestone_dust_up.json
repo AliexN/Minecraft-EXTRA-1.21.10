@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/redstone_dust_side_alt0",
+  "parent": "minecraft:block/redstone_dust_up",
   "textures": {
     "particle": "aquamod:block/bluestone_dust",
     "line": "aquamod:block/bluestone_dust",
